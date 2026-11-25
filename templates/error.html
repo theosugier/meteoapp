@@ -1,0 +1,14 @@
+{{define "error"}}
+<!DOCTYPE html>
+<html lang="fr">
+    {{template "head"}}
+    <body>
+        <main>
+            <h1>Erreur {{.Status}}</h1>
+            <p>{{.Message}}</p>
+            <a href="/">Retour à l'accueil</a>
+        </main>
+        {{template "footer"}}
+    </body>
+</html>
+{{end}}
