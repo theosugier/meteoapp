@@ -17,6 +17,7 @@ func Ville(w http.ResponseWriter, r *http.Request) {
 	if dataErr != nil {
 		if errors.Is(dataErr, models.BadRequestError) {
 			helpers.RenderError(w, "/ville", http.StatusBadRequest, "demande invalide")
+			return
 		}
 		//...
 	}
