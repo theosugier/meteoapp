@@ -37,6 +37,15 @@ func Ville(w http.ResponseWriter, r *http.Request) {
 		helpers.RenderError(w, r.URL.Path, 404, "Aucune commune ne correspond à « "+q+" ».")
 		return
 	}
+	if commune, ok := services.CommuneUnique(data, q); ok {
+		page, err := services.PreparerPageMeteo(commune.Code)
+		if err != nil {
+			helpers.RenderError(w, r.URL.Path, 503, "Service momentanément indisponible.")
+			return
+		}
+		helpers.Render(w, 200, "meteo", page)
+		return
+	}
 	helpers.Render(w, 200, "ville", data)
 }
 
