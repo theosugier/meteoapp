@@ -15,6 +15,10 @@ func Accueil(w http.ResponseWriter, r *http.Request) {
 
 func Ville(w http.ResponseWriter, r *http.Request) {
 	q := strings.TrimSpace(r.URL.Query().Get("q"))
+	if q == "" {
+		helpers.Render(w, 400, "index", models.PageRecherche{Valeur: q, Erreur: "Veuillez saisir le nom d'une ville."})
+		return 
+	}
 	data, dataErr := services.SearchCommuneByName(q)
 	if dataErr != nil {
 		if errors.Is(dataErr, models.BadRequestError) {
