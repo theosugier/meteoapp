@@ -48,3 +48,40 @@ func ChercherCommunes(nom string) ([]models.Commune, error) {
 	}
 	return data, nil
 }
+
+// je recupere UNE commune grace a son code INSEE (ex: 13001)
+func CommuneParCode(code string) (models.Commune, error) {
+	endpoint := fmt.Sprintf("%s/communes/%s?fields=code,nom,codesPostaux,population,centre", geoURL, url.PathEscape(code))
+
+	request, err := http.NewRequest(http.MethodGet, endpoint, nil)
+	if err != nil {
+		return models.Commune{}, fmt.Errorf("Erreur (%w) : Preparation de la requete, %v", models.InternalError, err)
+	}
+
+	request.Header.Set("User-Agent", "meteoapp-theosugier/1.0")
+
+	response, responseErr := client.Do(request)
+	if responseErr != nil {
+		return models.Commune{}, fmt.Errorf("Erreur (%w) : Envoie de la requete, %v", models.InternalError, responseErr)
+	}
+
+	defer response.Body.Close()
+
+	switch response.StatusCode {
+	case http.StatusOK:
+
+	case http.StatusNotFound:
+		return models.Commune{}, models.NotFoundError // code qui existe pas (99999)
+	case http.StatusBadRequest:
+		return models.Commune{}, models.NotFoundError // code mal ecrit (abc) = commune introuvable aussi
+	default:
+		return models.Commune{}, models.InternalError
+	}
+
+	var data models.Commune // une seule commune cette fois, pas de []
+	errDecode := json.NewDecoder(response.Body).Decode(&data)
+	if errDecode != nil {
+		return models.Commune{}, models.InternalError
+	}
+	return data, nil
+}
