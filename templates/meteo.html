@@ -1,11 +1,21 @@
 {{define "meteo"}}
 <!DOCTYPE html>
 <html lang="fr">
-    {{template "head"}}           
-    <body>      
-        <h1>Prévisions sur 7 jours</h1>
-        {{template "footer"}}      
+    {{template "head"}}
+    <body>
+        <main>
+            <h1>Météo à {{.Commune.Nom}}</h1>
+            <p>
+                {{with .Commune.CodesPostaux}}Code postal : {{index . 0}} · {{end}}{{.Commune.Population}} habitants
+            </p>
+
+            <p>Prévisions sur 7 jours : à venir.</p>
+
+            <iframe class="carte" src="{{.CarteURL}}" title="Carte de {{.Commune.Nom}}"></iframe>
+
+            <p><a href="/">Nouvelle recherche</a></p>
+        </main>
+        {{template "footer"}}
     </body>
 </html>
 {{end}}
-

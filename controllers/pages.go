@@ -41,7 +41,19 @@ func Ville(w http.ResponseWriter, r *http.Request) {
 }
 
 func Meteo(w http.ResponseWriter, r *http.Request) {
-	helpers.Render(w, 200, "meteo", nil)
+	code := strings.TrimSpace(r.URL.Query().Get("code"))
+
+	page, err := services.PreparerPageMeteo(code)
+	if err != nil {
+		if errors.Is(err, models.NotFoundError) {
+			helpers.RenderError(w, r.URL.Path, 404, "Cette commune n'existe pas.")
+			return
+		}
+		helpers.RenderError(w, r.URL.Path, 503, "Service momentanément indisponible.")
+		return
+	}
+
+	helpers.Render(w, 200, "meteo", page)
 }
 
 func PageInconnue(w http.ResponseWriter, r *http.Request) {
