@@ -30,7 +30,8 @@ func Ville(w http.ResponseWriter, r *http.Request) {
 			helpers.RenderError(w, "/ville", http.StatusBadRequest, "demande invalide")
 			return
 		}
-		//...
+		helpers.RenderError(w, r.URL.Path, 503, "Service momentanément indisponible.")
+		return
 	}
 	if len(data) == 0 {
 		helpers.RenderError(w, r.URL.Path, 404, "Aucune commune ne correspond à « "+q+" ».")
