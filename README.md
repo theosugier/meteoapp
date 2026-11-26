@@ -19,10 +19,13 @@ Ensuite aller sur http://localhost:8080
 ## Exemples d'URL
 
 - / : la page d'accueil avec le formulaire
-- /ville?q=Marseille : la liste des communes trouvees
+- /ville?q=Aix-en-Provence : une seule commune porte ce nom, on va direct sur sa meteo
+- /ville?q=Saint : la liste des communes qui contiennent ce nom
 - /ville?q=Saint-Martin : page de choix entre les communes qui ont le meme nom
 - /ville?q= : erreur 400, il faut saisir une ville
-- /meteo?code=13001 : la meteo d'Aix-en-Provence (pas encore fini)
+- /ville?q=Zzzzz : erreur 404, aucune commune trouvee
+- /meteo?code=13001 : la page d'Aix-en-Provence avec la carte (previsions pas encore finies)
+- /meteo?code=99999 : erreur 404, la commune existe pas
 - /page-inconnue : erreur 404
 
 ## Ce qui marche pour l'instant
@@ -31,9 +34,11 @@ Ensuite aller sur http://localhost:8080
 - les templates avec le head et le footer communs
 - le CSS dans assets/
 - le formulaire de recherche et la verification de la saisie
-- la recherche des communes avec l'API
+- la recherche des communes avec l'API (et la page de choix si plusieurs ont le meme nom)
+- les erreurs 400, 404 et 503 sur la recherche
+- la page meteo d'une commune avec la carte OpenStreetMap
 
-Reste a faire : les previsions meteo, la carte, les barres de temperature et les autres erreurs.
+Reste a faire : les previsions des 7 jours (Open-Meteo) et les barres de temperature.
 
 ## Sources
 
