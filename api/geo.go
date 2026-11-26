@@ -6,6 +6,7 @@ import (
 	"meteoapp/models"
 	"net/http"
 	"time"
+	"net/url"
 )
 
 const geoURL = "https://geo.api.gouv.fr"
@@ -13,12 +14,14 @@ const geoURL = "https://geo.api.gouv.fr"
 var client = &http.Client{Timeout: 5 * time.Second}
 
 func ChercherCommunes(nom string) ([]models.Commune, error) {
-	endpoint := fmt.Sprintf("%s/communes?nom=%s&fields=code,nom,codesPostaux,population,centre", geoURL, nom)
+	endpoint := fmt.Sprintf("%s/communes?nom=%s&fields=code,nom,codesPostaux,population,centre&boost=population&limit=10", geoURL, url.QueryEscape(nom))
 
 	request, err := http.NewRequest(http.MethodGet, endpoint, nil)
 	if err != nil {
 		return nil, fmt.Errorf("Erreur (%w) : Preparation de la requete, %v", models.InternalError, err)
 	}
+
+	request.Header.Set("User-Agent", "meteoapp-theosugier/1.0")
 
 	response, responseErr := client.Do(request)
 	if responseErr != nil {
