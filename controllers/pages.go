@@ -32,6 +32,10 @@ func Ville(w http.ResponseWriter, r *http.Request) {
 		}
 		//...
 	}
+	if len(data) == 0 {
+		helpers.RenderError(w, r.URL.Path, 404, "Aucune commune ne correspond à « "+q+" ».")
+		return
+	}
 	helpers.Render(w, 200, "ville", data)
 }
 
