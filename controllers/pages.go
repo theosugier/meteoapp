@@ -1,7 +1,10 @@
 package controllers
 
 import (
+	"errors"
 	"meteoapp/helpers"
+	"meteoapp/models"
+	"meteoapp/services"
 	"net/http"
 )
 
@@ -10,7 +13,14 @@ func Accueil(w http.ResponseWriter, r *http.Request) {
 }
 
 func Ville(w http.ResponseWriter, r *http.Request) {
-	helpers.Render(w, 200, "ville", nil)
+	data, dataErr := services.SearchCommuneByName("salon")
+	if dataErr != nil {
+		if errors.Is(dataErr, models.BadRequestError) {
+			helpers.RenderError(w, "/ville", http.StatusBadRequest, "demande invalide")
+		}
+		//...
+	}
+	helpers.Render(w, 200, "ville", data)
 }
 
 func Meteo(w http.ResponseWriter, r *http.Request) {
