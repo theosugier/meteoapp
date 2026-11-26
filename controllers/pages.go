@@ -6,6 +6,7 @@ import (
 	"meteoapp/models"
 	"meteoapp/services"
 	"net/http"
+	"strings"
 )
 
 func Accueil(w http.ResponseWriter, r *http.Request) {
@@ -13,7 +14,8 @@ func Accueil(w http.ResponseWriter, r *http.Request) {
 }
 
 func Ville(w http.ResponseWriter, r *http.Request) {
-	data, dataErr := services.SearchCommuneByName("salon")
+	q := strings.TrimSpace(r.URL.Query().Get("q"))
+	data, dataErr := services.SearchCommuneByName(q)
 	if dataErr != nil {
 		if errors.Is(dataErr, models.BadRequestError) {
 			helpers.RenderError(w, "/ville", http.StatusBadRequest, "demande invalide")
