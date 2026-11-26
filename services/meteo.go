@@ -6,17 +6,14 @@ import (
 	"meteoapp/models"
 )
 
-// ecart autour de la commune pour la carte (donne par le sujet)
 const ecartCarte = 0.05
 
-// je prepare tout ce dont la page meteo a besoin
 func PreparerPageMeteo(code string) (models.PageMeteo, error) {
 	commune, err := api.CommuneParCode(code)
 	if err != nil {
 		return models.PageMeteo{}, err
 	}
 
-	// securite : sans les 2 coordonnees, impossible de placer la carte
 	if len(commune.Centre.Coordinates) < 2 {
 		return models.PageMeteo{}, models.InternalError
 	}
@@ -27,9 +24,8 @@ func PreparerPageMeteo(code string) (models.PageMeteo, error) {
 	}, nil
 }
 
-// l'URL de la carte OpenStreetMap, calculee en Go
 func urlCarte(c models.Commune) string {
-	lon := c.Centre.Coordinates[0] // attention : l'API Geo donne [longitude, latitude]
+	lon := c.Centre.Coordinates[0]
 	lat := c.Centre.Coordinates[1]
 	d := ecartCarte
 

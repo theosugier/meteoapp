@@ -49,7 +49,6 @@ func ChercherCommunes(nom string) ([]models.Commune, error) {
 	return data, nil
 }
 
-// je recupere UNE commune grace a son code INSEE (ex: 13001)
 func CommuneParCode(code string) (models.Commune, error) {
 	endpoint := fmt.Sprintf("%s/communes/%s?fields=code,nom,codesPostaux,population,centre", geoURL, url.PathEscape(code))
 
@@ -71,14 +70,14 @@ func CommuneParCode(code string) (models.Commune, error) {
 	case http.StatusOK:
 
 	case http.StatusNotFound:
-		return models.Commune{}, models.NotFoundError // code qui existe pas (99999)
+		return models.Commune{}, models.NotFoundError
 	case http.StatusBadRequest:
-		return models.Commune{}, models.NotFoundError // code mal ecrit (abc) = commune introuvable aussi
+		return models.Commune{}, models.NotFoundError
 	default:
 		return models.Commune{}, models.InternalError
 	}
 
-	var data models.Commune // une seule commune cette fois, pas de []
+	var data models.Commune
 	errDecode := json.NewDecoder(response.Body).Decode(&data)
 	if errDecode != nil {
 		return models.Commune{}, models.InternalError
