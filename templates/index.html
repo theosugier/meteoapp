@@ -1,12 +1,20 @@
 {{define "index"}}
 <!DOCTYPE html>
 <html lang="fr">
-    {{template "head"}}           
-    <body>      
+    {{template "head"}}
+    <body>
         <h1>Météo France</h1>
-        <p>Formulaire à venir</p> 
-        {{template "footer"}}      
+
+        <form action="/ville" method="get">
+            <input type="text" name="q" value="{{.Valeur}}">
+            <button type="submit">Chercher</button>
+        </form>
+
+        {{with .Erreur}}
+            <p class="erreur-form">{{.}}</p>
+        {{end}}
+
+        {{template "footer"}}
     </body>
 </html>
 {{end}}
-
