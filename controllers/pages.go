@@ -9,7 +9,7 @@ import (
 )
 
 func Accueil(w http.ResponseWriter, r *http.Request) {
-	helpers.Render(w, 200, "index", nil)
+	helpers.Render(w, 200, "index", models.PageRecherche{})
 }
 
 func Ville(w http.ResponseWriter, r *http.Request) {
