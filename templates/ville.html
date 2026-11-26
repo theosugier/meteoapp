@@ -4,6 +4,14 @@
     {{template "head"}}           
     <body>      
         <h1>Choisissez une commune</h1>
+        <ul class="communes">
+            {{range .}} 
+            <li>
+                {{.Nom}}
+                <a href="/meteo?code={{.Code}}">Voir la météo</a> 
+            </li> 
+            {{end}}
+        </ul>
         {{template "footer"}}      
     </body>
 </html>
