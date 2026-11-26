@@ -7,6 +7,7 @@ import (
 	"meteoapp/services"
 	"net/http"
 	"strings"
+	"unicode/utf8"
 )
 
 func Accueil(w http.ResponseWriter, r *http.Request) {
@@ -17,7 +18,11 @@ func Ville(w http.ResponseWriter, r *http.Request) {
 	q := strings.TrimSpace(r.URL.Query().Get("q"))
 	if q == "" {
 		helpers.Render(w, 400, "index", models.PageRecherche{Valeur: q, Erreur: "Veuillez saisir le nom d'une ville."})
-		return 
+		return
+	}
+	if utf8.RuneCountInString(q) < 2 || utf8.RuneCountInString(q) > 60 {
+		helpers.Render(w, 400, "index", models.PageRecherche{Valeur: q, Erreur: "Le nom doit contenir entre 2 et 60 caractères."})
+		return
 	}
 	data, dataErr := services.SearchCommuneByName(q)
 	if dataErr != nil {
